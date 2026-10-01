@@ -1,0 +1,28 @@
+relationship cada8741-a2a9-0dea-ffeb-aaeb9193b91f
+	fromColumn: Sales.CustomerKey
+	toColumn: Customers.CustomerKey
+
+relationship 293459e6-33ea-64a0-9a0d-e2851dd6fcd0
+	fromColumn: Sales.ProductKey
+	toColumn: Products.ProductKey
+
+relationship 0390cafb-9a8d-2d34-6231-4f9a3b951214
+	fromColumn: Sales.SupplierKey
+	toColumn: Suppliers.SupplierKey
+
+relationship 662771ed-c367-4fd9-3272-622acb1073ed
+	fromColumn: Sales.EmployeeKey
+	toColumn: Employees.EmployeeKey
+
+relationship 0a16a506-e089-ead1-6ed2-f3b419504307
+	fromColumn: Sales.ShipperKey
+	toColumn: Shippers.ShipperKey
+
+relationship 76205a3d-cc94-b9ef-c3aa-d9156e9a85d3
+	fromColumn: Products.CategoryID
+	toColumn: Categories.CategoryID
+
+relationship 973f8dd8-efa9-62e9-3f66-3d5e636cf717
+	fromColumn: Sales.DateKey
+	toColumn: Date.DateKey
+

@@ -1,0 +1,174 @@
+/// Suppliers contains supplier information used to analyze products and sales by supplier. Each row represents one supplier record. Supplier Key is the surrogate key used for relationships with Products and is a technical relationship key. Supplier ID is the business identifier of the supplier from the source system. The table contains supplier company, contact, address, geographic, and communication information where available. Supplier attributes can be used to group and filter products and evaluate sales performance associated with products supplied by each supplier. Supplier is related to Products, and sales analysis by supplier should be performed through the Products dimension and Sales fact table.
+table Suppliers
+	lineageTag: 242cb7b9-a769-4b4b-a0a3-83f9702971ee
+	sourceLineageTag: [gold].[dim_supplier]
+
+	/// Surrogate key used to connect suppliers to product records. This is a technical relationship key and should not be treated as the supplier's business identifier.
+	column SupplierKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 27a98dca-38bb-40cd-b500-9daa45740f99
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the supplier from the source system.
+	column SupplierID
+		dataType: int64
+		formatString: 0
+		lineageTag: 20ff8c32-ba0a-401f-8651-7deacf467714
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the supplier company. Use this field for supplier-level reporting and analysis.
+	column CompanyName
+		dataType: string
+		lineageTag: 7d8923c1-d929-4b20-bab1-43472a9d1e77
+		sourceLineageTag: CompanyName
+		summarizeBy: none
+		sourceColumn: CompanyName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the primary contact person associated with the supplier company.
+	column ContactName
+		dataType: string
+		lineageTag: be588813-93c4-44ec-963e-c28f735afa4d
+		sourceLineageTag: ContactName
+		summarizeBy: none
+		sourceColumn: ContactName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Job title or role of the primary contact person at the supplier company.
+	column ContactTitle
+		dataType: string
+		lineageTag: 7cc070cf-e61d-4156-a82b-f1a60e37ddd8
+		sourceLineageTag: ContactTitle
+		summarizeBy: none
+		sourceColumn: ContactTitle
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Street address of the supplier company.
+	column Address
+		dataType: string
+		lineageTag: a3faa77b-b27e-4bdb-8739-c029118abb82
+		sourceLineageTag: Address
+		summarizeBy: none
+		sourceColumn: Address
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// City where the supplier company is located.
+	column City
+		dataType: string
+		lineageTag: 21d8a1f9-20a7-41b2-b7db-cf4641f4f1e7
+		sourceLineageTag: City
+		summarizeBy: none
+		sourceColumn: City
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// City where the supplier company is located.
+	column Region
+		dataType: string
+		lineageTag: d3c9d1d7-8047-416f-bc2d-b6f33a9b5eb5
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Postal or ZIP code associated with the supplier's address.
+	column PostalCode
+		dataType: string
+		lineageTag: 9301ea6e-6a93-4e06-bf73-233523e7013d
+		sourceLineageTag: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Country where the supplier company is located. Use this field for geographic supplier analysis.
+	column Country
+		dataType: string
+		lineageTag: 566b90a1-4c67-411b-b80f-d16d10acfe54
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Primary telephone number associated with the supplier company.
+	column Phone
+		dataType: string
+		lineageTag: d37517f4-6219-426a-8444-ffd39a7c1529
+		sourceLineageTag: Phone
+		summarizeBy: none
+		sourceColumn: Phone
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Fax number associated with the supplier company when available.
+	column Fax
+		dataType: string
+		lineageTag: 69e9b42f-012b-4bf7-9cd7-636fc1867dc8
+		sourceLineageTag: Fax
+		summarizeBy: none
+		sourceColumn: Fax
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Website or homepage reference associated with the supplier company when available. This field is informational and should not be used in business calculations.
+	column HomePage
+		dataType: string
+		lineageTag: e371494d-cb8b-4326-9324-f794bb575f0c
+		sourceLineageTag: HomePage
+		summarizeBy: none
+		sourceColumn: HomePage
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Suppliers = entity
+		mode: directLake
+		source
+			entityName: dim_supplier
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "Fluent2-CY26SU08",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Custom_Brand_Theme_V39360292798338989.json",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU08",
+          "path": "BaseThemes/Fluent2-CY26SU08.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Code_Generated_Image_(1)1255433695200635.png",
+          "path": "Code_Generated_Image_(1)1255433695200635.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(1)507630625806963.png",
+          "path": "Code_Generated_Image_(1)507630625806963.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(1)9082001513571989.png",
+          "path": "Code_Generated_Image_(1)9082001513571989.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(2)9457797726226879.png",
+          "path": "Code_Generated_Image_(2)9457797726226879.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(3)08248536391993777.png",
+          "path": "Code_Generated_Image_(3)08248536391993777.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(4)38845000160574417.png",
+          "path": "Code_Generated_Image_(4)38845000160574417.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(4)6890628751886699.png",
+          "path": "Code_Generated_Image_(4)6890628751886699.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(5)8612854080988901.png",
+          "path": "Code_Generated_Image_(5)8612854080988901.png",
+          "type": "Image"
+        },
+        {
+          "name": "Code_Generated_Image_(7)348795950426358.png",
+          "path": "Code_Generated_Image_(7)348795950426358.png",
+          "type": "Image"
+        },
+        {
+          "name": "Custom_Brand_Theme_V39360292798338989.json",
+          "path": "Custom_Brand_Theme_V39360292798338989.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "Gemini_Generated_Image_2rzgv022809159309555863.jpg",
+          "path": "Gemini_Generated_Image_2rzgv022809159309555863.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_2rzgv0228756464079172406.jpg",
+          "path": "Gemini_Generated_Image_2rzgv0228756464079172406.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_2rzgv026325650373544662.jpg",
+          "path": "Gemini_Generated_Image_2rzgv026325650373544662.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_gj8vocg21160640777747108.jpg",
+          "path": "Gemini_Generated_Image_gj8vocg21160640777747108.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_n4gjbnn08668618744148582.jpg",
+          "path": "Gemini_Generated_Image_n4gjbnn08668618744148582.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_wnjbc3w19411098274457605.jpg",
+          "path": "Gemini_Generated_Image_wnjbc3w19411098274457605.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Gemini_Generated_Image_ydwdnoy7017301598643344.jpg",
+          "path": "Gemini_Generated_Image_ydwdnoy7017301598643344.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "inovasys-logo-hd-footer9943409658931195.png",
+          "path": "inovasys-logo-hd-footer9943409658931195.png",
+          "type": "Image"
+        },
+        {
+          "name": "page2_layout44975916395537696.png",
+          "path": "page2_layout44975916395537696.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

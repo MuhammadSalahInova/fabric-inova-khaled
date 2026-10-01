@@ -1,0 +1,274 @@
+/// Customers contains customer information used to analyze sales and business activity by customer. The table represents customer dimension records and supports Slowly Changing Dimension Type 2 (SCD Type 2) history. Customer Key is the surrogate key used to identify a specific version of a customer record and is used for relationships with the Sales table. Customer ID is the business identifier originating from the source system and identifies the customer independently of historical versions. The table contains customer company, contact, address, geographic, and communication information. Effective From and Effective To define the validity period of each customer record version. Is Current identifies whether a record represents the current version of the customer. Historical records should not be treated as duplicate customers; they represent different versions of the same business customer over time. Use Customer ID for business-level customer identification and Customer Key only for relationships and technical modeling.
+table Customers
+	lineageTag: 8eecd2cd-01ee-4874-bd56-5dbe45669ea6
+	sourceLineageTag: [gold].[dim_customer]
+
+	/// Surrogate key that uniquely identifies a specific version of a customer record in the Customers dimension. It is a technical key used for relationships with Sales and should not be treated as the customer's business identifier.
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 65612bf9-d321-429d-a18d-59ce02ddbf04
+		sourceLineageTag: CustomerKey
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the customer from the source system. The same Customer ID can appear in multiple dimension records when customer attributes change over time because this dimension uses Slowly Changing Dimension Type 2.
+	column CustomerID
+		dataType: string
+		lineageTag: 217dbfa4-0d31-418f-abd5-b246b8463a88
+		sourceLineageTag: CustomerID
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the customer company. Use this field to identify, group, filter, and compare customers in business analysis.
+	column CompanyName
+		dataType: string
+		lineageTag: 6f5769f5-cff6-4830-901e-902437f2e985
+		sourceLineageTag: CompanyName
+		summarizeBy: none
+		sourceColumn: CompanyName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the primary contact person associated with the customer company.
+	column ContactName
+		dataType: string
+		lineageTag: 0b717d50-cd32-4d9f-b4f2-7b300dbc40d2
+		sourceLineageTag: ContactName
+		summarizeBy: none
+		sourceColumn: ContactName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Job title or role of the primary contact person at the customer company.
+	column ContactTitle
+		dataType: string
+		lineageTag: a5e23c11-2ad0-443a-8770-f4f47a4538c3
+		sourceLineageTag: ContactTitle
+		summarizeBy: none
+		sourceColumn: ContactTitle
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Job title or role of the primary contact person at the customer company.
+	column Address
+		dataType: string
+		lineageTag: 7b3e8c6f-bf6a-4990-b247-e08de7da1bd7
+		sourceLineageTag: Address
+		summarizeBy: none
+		sourceColumn: Address
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// City where the customer company is located. Use this field for geographic customer analysis.
+	column City
+		dataType: string
+		lineageTag: edfbbc0b-5621-4c25-bb34-69e52b25cb4f
+		sourceLineageTag: City
+		summarizeBy: none
+		sourceColumn: City
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// State, province, or regional area associated with the customer's location. Missing source values may be represented as Unknown.
+	column Region
+		dataType: string
+		lineageTag: a55bb8c8-df13-4769-9186-8771b380cd20
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Postal or ZIP code associated with the customer's address.
+	column PostalCode
+		dataType: string
+		lineageTag: 05e52834-f848-42ba-895f-2b1327eec42d
+		sourceLineageTag: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Country where the customer company is located. Use this field for country-level geographic analysis of customers and sales.
+	column Country
+		dataType: string
+		lineageTag: 48fadbd0-a846-4d8f-8bcd-e5d43aca71ca
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Primary telephone number associated with the customer company.
+	column Phone
+		dataType: string
+		lineageTag: 96e7cb55-0434-4b1a-b9f9-a3bd2768ab29
+		sourceLineageTag: Phone
+		summarizeBy: none
+		sourceColumn: Phone
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Fax number associated with the customer company when available. Missing values indicate that no fax number was provided by the source system.
+	column Fax
+		dataType: string
+		lineageTag: 3fec7572-2537-485e-9b7a-fbb0233781df
+		sourceLineageTag: Fax
+		summarizeBy: none
+		sourceColumn: Fax
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when the customer data was loaded into the data platform. This is a technical ingestion metadata field and should not be interpreted as the date when the customer was created or changed in the business system.
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 54b63d6a-ec37-4a92-9549-4a1445b6a05c
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Technical indicator describing the type of source data operation associated with the loaded customer record, such as INSERT or UPDATE. This field is intended for data engineering and auditing purposes rather than normal business analysis.
+	column Operation
+		dataType: string
+		lineageTag: 3eccd2e4-5cf4-449b-bcd1-fb0be20a58d5
+		sourceLineageTag: Operation
+		summarizeBy: none
+		sourceColumn: Operation
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Date associated with the creation metadata of the customer record when available from the source data. Missing values indicate that the source did not provide a creation date for that record.
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 632c86da-db97-4129-ba9b-c2a0b429c491
+		sourceLineageTag: CreatedDate
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Date associated with the most recent modification metadata of the customer record when available from the source data. It represents source modification information and should not be confused with Effective From or Effective To.
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5b874dfa-c59a-4fdb-9f94-1f405ab1a796
+		sourceLineageTag: ModifiedDate
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when this specific version of the customer dimension record became effective. This field is used to maintain historical customer changes under Slowly Changing Dimension Type 2.
+	column EffectiveFrom
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 21fbe0bf-eb39-47c8-9dd1-f52e1fde16b6
+		sourceLineageTag: EffectiveFrom
+		summarizeBy: none
+		sourceColumn: EffectiveFrom
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when this specific version of the customer dimension record stops being effective. The value 9999-12-31 23:59:59 represents an open-ended current record.
+	column EffectiveTo
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f7335a72-7bc1-4212-9791-e6e5f1ad19dc
+		sourceLineageTag: EffectiveTo
+		summarizeBy: none
+		sourceColumn: EffectiveTo
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Boolean indicator identifying whether the customer dimension record represents the current version of the customer. True means the record is the current version; False means it is a historical version.
+	column IsCurrent
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4537d321-7ee0-4091-a2e1-93dc1eda5094
+		sourceLineageTag: IsCurrent
+		summarizeBy: none
+		sourceColumn: IsCurrent
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Segment' =
+			
+			VAR R = [R_Score]
+			VAR F = [F_Score]
+			VAR M = [M_Score]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    R >= 4 && F >= 4 && M >= 4, "Champions",
+			    R >= 3 && F >= 3, "Loyal Customers",
+			    R >= 4 && F <= 2, "New Customers",
+			    R <= 2 && F >= 3 && M >= 3, "At Risk",
+			    R <= 2 && F <= 2 && M <= 2, "Lost",
+			    "Potential Loyalist"
+			)
+		lineageTag: 0171107e-0fe4-4e53-be3a-ee33271984d2
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customers = entity
+		mode: directLake
+		source
+			entityName: dim_customer
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

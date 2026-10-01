@@ -1,0 +1,437 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": false,
+          "items": {
+            "value": "@json('[\"Employees\", \"Categories\", \"Shippers\", \"Suppliers\", \"Territories\"]')",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "RestSource",
+                  "requestMethod": "GET",
+                  "paginationRules": {
+                    "AbsoluteUrl": "$['@odata.nextLink']"
+                  },
+                  "httpRequestTimeout": "00:01:40",
+                  "requestInterval": "00.00:00:00.010",
+                  "datasetSettings": {
+                    "type": "RestResource",
+                    "typeProperties": {
+                      "relativeUrl": {
+                        "value": "@concat(item(),'?$format=json')",
+                        "type": "Expression"
+                      }
+                    },
+                    "schema": [],
+                    "externalReferences": {
+                      "connection": "e395b361-a206-467e-97c3-bb60bd431dbf"
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "LakehouseTableSink",
+                  "tableActionOption": "OverwriteSchema",
+                  "applyVOrder": false,
+                  "enableTimestampNtz": false,
+                  "partitionOption": "None",
+                  "datasetSettings": {
+                    "type": "LakehouseTable",
+                    "typeProperties": {
+                      "schema": "dbo",
+                      "table": {
+                        "value": "@concat('bronze_', toLower(item()))",
+                        "type": "Expression"
+                      }
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "Ecom_Lakehouse",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "5c54d984-f0fc-80b3-4ca8-225573ac2635",
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "rootFolder": "Tables"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  },
+                  "columnFlattenSettings": {
+                    "treatArrayAsString": false,
+                    "treatStructAsString": false,
+                    "flattenColumnDelimiter": "."
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Copy data1",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "ForEach1",
+        "dependsOn": []
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ Pipeline: Bronze_Ingestion</p>\n<p><br></p>\n<p>الـ Activity اللي فشلت: ForEach1 (سحب الجداول من API)</p>\n<p><br></p>\n<p>يُرجى فتح الـ Pipeline في Fabric ومراجعة تاب Output لمعرفة أي جدول فشل بالتحديد وسبب الفشل.</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Office365Email1",
+        "dependsOn": [
+          {
+            "activity": "ForEach1",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "51fb7aeb-4204-af3f-49e1-94722290e684",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Notebook_Bronze",
+        "dependsOn": [
+          {
+            "activity": "Incremental Load",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "91c3d55f-91ea-9f4b-4e5a-a25f252f1c10",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Bronze_Validation",
+        "dependsOn": [
+          {
+            "activity": "Notebook_Bronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "15dad733-7979-9e6b-4ea6-f112fdc778f8",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Notebook_silver",
+        "dependsOn": [
+          {
+            "activity": "Bronze_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "c24e1632-b1cc-b2e8-4904-968914043460",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Silver_Validation",
+        "dependsOn": [
+          {
+            "activity": "Notebook_silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ خطوة: Notebook_Bronze</p>\n<p><br></p>\n<p>رسالة الخطأ:@{activity('Notebook_Bronze').output}@{activity('Bronze_Validation').output}</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Email_Bronze_Fail",
+        "dependsOn": [
+          {
+            "activity": "Notebook_Bronze",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          },
+          {
+            "activity": "Bronze_Validation",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ خطوة: Notebook_Bronze</p>\n<p><br></p>\n<p>رسالة الخطأ:@{activity('Notebook_silver').output}@{activity('Silver_Validation').output}</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Email_Silver_Fail",
+        "dependsOn": [
+          {
+            "activity": "Notebook_silver",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          },
+          {
+            "activity": "Silver_Validation",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ خطوة: Notebook_Bronze</p>\n<p><br></p>\n<p>رسالة الخطأ:@{activity('Silver_SCD2').output}</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Email_SilverScd",
+        "dependsOn": [
+          {
+            "activity": "Silver_SCD2",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "b5da4040-82c4-a67b-4160-bb5d3582db78",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Silver_SCD2",
+        "dependsOn": [
+          {
+            "activity": "Silver_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "f0f395c7-18de-b606-4c12-008077470b32",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Incremental Load",
+        "dependsOn": [
+          {
+            "activity": "ForEach1",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ خطوة: Notebook_Bronze</p>\n<p><br></p>\n<p>رسالة الخطأ:@{activity('Incremental Load').output}</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Email_Incremental",
+        "dependsOn": [
+          {
+            "activity": "Incremental Load",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "a4e7eefa-167f-a799-4382-0efdbb3bc4a3",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Notebook_Gold",
+        "dependsOn": [
+          {
+            "activity": "Silver_SCD2",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "<p>حصل فشل في تنفيذ خطوة: Notebook_Bronze</p>\n<p><br></p>\n<p>رسالة الخطأ:@{activity('Silver_SCD2').output}@{pipeline()?.TriggerEvent?.Source}@{pipeline()?.TriggerEvent?.Subject}</p>",
+          "to": "kwaleed-next@inovasys.com",
+          "subject": "Pipeline: Bronze_Ingestion(Fail)"
+        },
+        "externalReferences": {
+          "connection": "071c1e26-044b-492d-9c0b-72ebefb215cf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Email_Gold  notebok",
+        "dependsOn": [
+          {
+            "activity": "Notebook_Gold",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

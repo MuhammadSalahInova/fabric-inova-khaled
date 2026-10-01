@@ -1,0 +1,170 @@
+/// Date contains the calendar information used for time-based analysis of sales and business performance. Each row represents one calendar date. Date Key is the technical key used to connect dates to sales transactions. The table contains standard calendar attributes such as Date, Year, Quarter, Month, Month Number, Week, Day, Day Name, and weekend indicators where available. Use the Date table for all time-based analysis, filtering, grouping, and time-intelligence calculations rather than using raw date fields from the Sales table. The Date table is the primary calendar dimension for calculating monthly, quarterly, yearly, YTD, MTD, previous-period, and year-over-year sales metrics.
+table Date
+	lineageTag: 517a5aa6-038c-443a-a31c-33daac98f546
+	sourceLineageTag: [gold].[dim_date]
+
+	/// Technical integer key representing a calendar date in YYYYMMDD format. It is used to connect Sales transactions to the Date dimension and should normally be hidden from business users.
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ef7d901b-81aa-4ab5-9afe-002e9edd1044
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Complete calendar date. This is the primary business date used for daily time-based analysis and filtering.
+	column FullDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 832e9ac4-fe31-407b-8ad2-e54f792be9e8
+		sourceLineageTag: FullDate
+		summarizeBy: none
+		sourceColumn: FullDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar year associated with the date. Use this field to analyze annual sales and business performance.
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b49fe06-7565-4b64-9a9b-460ac8a504d9
+		sourceLineageTag: Year
+		summarizeBy: none
+		sourceColumn: Year
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar quarter number associated with the date, ranging from 1 to 4. Use it for quarterly sales and performance analysis.
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 14dfd1c8-9705-480f-b256-51255c9c0349
+		sourceLineageTag: Quarter
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar month number associated with the date, ranging from 1 to 12. Use Month Number for sorting Month Name chronologically.
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 1379d994-2027-47da-ab31-9bd39ef49aef
+		sourceLineageTag: Month
+		summarizeBy: none
+		sourceColumn: Month
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar month name associated with the date, such as January, February, or August. Use this field for user-friendly monthly reporting and sort it by Month Number.
+	column MonthName
+		dataType: string
+		lineageTag: 393efe0b-ad1d-4272-8899-ce7bf1c78447
+		sourceLineageTag: MonthName
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Numeric calendar month number from 1 to 12. This field is primarily used to sort Month Name in chronological order.
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 1944df1f-fe6a-4856-babc-9870f802e10c
+		sourceLineageTag: MonthNumber
+		summarizeBy: none
+		sourceColumn: MonthNumber
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar week number associated with the date. Use this field for weekly sales and performance analysis.
+	column WeekOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 08050ead-2dbe-4b30-ab22-93f555a6e21e
+		sourceLineageTag: WeekOfYear
+		summarizeBy: none
+		sourceColumn: WeekOfYear
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Day of the month represented as a number from 1 to 31. Use it for daily calendar analysis when needed.
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b6c667c-000d-4eae-b564-85fa0d4dee60
+		sourceLineageTag: Day
+		summarizeBy: none
+		sourceColumn: Day
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the day of the week, such as Monday, Tuesday, or Wednesday. Use this field to analyze sales patterns by day of week.
+	column DayName
+		dataType: string
+		lineageTag: 42e4e31e-08f4-47c6-80a3-d65d57ee1be5
+		sourceLineageTag: DayName
+		summarizeBy: none
+		sourceColumn: DayName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the day of the week, such as Monday, Tuesday, or Wednesday. Use this field to analyze sales patterns by day of week.
+	column DayOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: 08087549-a91b-45a8-a883-82071d4ad5d7
+		sourceLineageTag: DayOfWeek
+		summarizeBy: none
+		sourceColumn: DayOfWeek
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Boolean indicator identifying whether the date falls on a weekend. True represents a weekend day and False represents a weekday.
+	column IsWeekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bfc21c6b-abe8-473d-80d6-4f7c729beb49
+		sourceLineageTag: IsWeekend
+		summarizeBy: none
+		sourceColumn: IsWeekend
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

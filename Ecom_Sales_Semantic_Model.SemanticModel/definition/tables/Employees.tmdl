@@ -1,0 +1,237 @@
+/// Employees contains employee information used to analyze sales performance by employee or sales representative. Each row represents an employee dimension record. Employee Key is the surrogate key used to connect employees to sales transactions and is a technical relationship key. Employee ID is the business identifier of the employee from the source system. The table contains employee identity, name, title, contact, address, geographic, and employment-related information where available. Employee attributes can be used to group and filter sales transactions and evaluate employee-level sales performance. Territory should not be assumed to be directly related to an employee in this semantic model because there is currently no valid Territory Key relationship between Employees and Territories.
+table Employees
+	lineageTag: a952da90-e54e-44fa-bdf9-b52b19112e9f
+	sourceLineageTag: [gold].[dim_employee]
+
+	/// Surrogate key used to connect employees to Sales transactions. This is a technical relationship key and should not be treated as the employee's business identifier.
+	column EmployeeKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e84dfd9-a8f6-44e2-a90b-d21be727bcc9
+		sourceLineageTag: EmployeeKey
+		summarizeBy: none
+		sourceColumn: EmployeeKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the employee from the source system.
+	column EmployeeID
+		dataType: int64
+		formatString: 0
+		lineageTag: f155915c-172f-460c-82d1-e0cae475fa61
+		sourceLineageTag: EmployeeID
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the employee from the source system.
+	column LastName
+		dataType: string
+		lineageTag: beebde24-e16e-43f3-b992-8316c19025a3
+		sourceLineageTag: LastName
+		summarizeBy: none
+		sourceColumn: LastName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First name of the employee.
+	column FirstName
+		dataType: string
+		lineageTag: 6f241c02-4e30-4458-87c8-7323f713e565
+		sourceLineageTag: FirstName
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Job title or organizational role of the employee. Use this field to analyze sales performance by employee role.
+	column Title
+		dataType: string
+		lineageTag: d8b72159-674c-4ec9-a439-8960f827865e
+		sourceLineageTag: Title
+		summarizeBy: none
+		sourceColumn: Title
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Courtesy title associated with the employee, such as Mr., Ms., Mrs., or Dr.
+	column TitleOfCourtesy
+		dataType: string
+		lineageTag: c5234e44-1972-4773-9df4-a1f4930e3497
+		sourceLineageTag: TitleOfCourtesy
+		summarizeBy: none
+		sourceColumn: TitleOfCourtesy
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Date of birth of the employee as provided by the source system. This field is primarily descriptive employee information and is not a sales performance metric.
+	column BirthDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7703f04f-734c-461e-8dff-ae39802ba6f1
+		sourceLineageTag: BirthDate
+		summarizeBy: none
+		sourceColumn: BirthDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Date when the employee joined the organization according to the source system.
+	column HireDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1feb31b1-5d28-4560-ae21-b4ecb97402e9
+		sourceLineageTag: HireDate
+		summarizeBy: none
+		sourceColumn: HireDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Street address associated with the employee.
+	column Address
+		dataType: string
+		lineageTag: e91c64f8-5ddf-40d1-9783-3e3fcc0757f7
+		sourceLineageTag: Address
+		summarizeBy: none
+		sourceColumn: Address
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Street address associated with the employee.
+	column City
+		dataType: string
+		lineageTag: bf3a4809-88c0-4753-a45b-1a2c41685b5c
+		sourceLineageTag: City
+		summarizeBy: none
+		sourceColumn: City
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// State, province, or regional area associated with the employee's location.
+	column Region
+		dataType: string
+		lineageTag: b046b477-dffd-4543-b307-c545b544af91
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Postal or ZIP code associated with the employee's address.
+	column PostalCode
+		dataType: string
+		lineageTag: 7c28a6d9-3263-484b-8d70-d8ff0a09da04
+		sourceLineageTag: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Country where the employee is located.
+	column Country
+		dataType: string
+		lineageTag: 89122dbc-8b82-442c-b783-03f0c6bf6cdf
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Home telephone number associated with the employee.
+	column HomePhone
+		dataType: string
+		lineageTag: 339cc79d-7100-45f5-95d3-cf20fcf0a445
+		sourceLineageTag: HomePhone
+		summarizeBy: none
+		sourceColumn: HomePhone
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Internal telephone extension associated with the employee.
+	column Extension
+		dataType: string
+		lineageTag: 97ab319b-fc56-4a81-a260-415f2d8b6dab
+		sourceLineageTag: Extension
+		summarizeBy: none
+		sourceColumn: Extension
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Additional descriptive information about the employee, including background, education, experience, or other source-system notes. This field is primarily informational and should not be used as a numeric or performance metric.
+	column Notes
+		dataType: string
+		lineageTag: 181b1fb5-7d92-482b-9cd7-41833be080ee
+		sourceLineageTag: Notes
+		summarizeBy: none
+		sourceColumn: Notes
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Employee ID of the manager or supervisor to whom the employee reports. This field can be used to understand the employee reporting hierarchy.
+	column ReportsTo
+		dataType: int64
+		formatString: 0
+		lineageTag: dce46e81-e78c-442d-be1b-45a0654a53e5
+		sourceLineageTag: ReportsTo
+		summarizeBy: none
+		sourceColumn: ReportsTo
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source path or URL reference to the employee's photo. This is a descriptive or presentation-related field and should not be used for business calculations.
+	column PhotoPath
+		dataType: string
+		lineageTag: 2f712755-7a60-4cca-a408-092d2d267bae
+		sourceLineageTag: PhotoPath
+		summarizeBy: none
+		sourceColumn: PhotoPath
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Employees = entity
+		mode: directLake
+		source
+			entityName: dim_employee
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

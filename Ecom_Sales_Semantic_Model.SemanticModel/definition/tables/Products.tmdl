@@ -1,0 +1,261 @@
+/// Products contains product information used to analyze sales performance by product. Each row represents a product record and provides descriptive and business attributes for products sold through the Sales table. Product Key is the surrogate key used for relationships with Sales and should be treated as a technical key. Product ID is the business identifier of the product from the source system. The table includes product name, category, supplier, pricing, inventory, reorder level, quantity-per-unit, and product availability information where applicable. Category information is used to group products into business categories, while Supplier information identifies the company providing the product. Unit Price represents the product's standard or selling price as defined by the source product information and should not automatically be interpreted as the final transaction price when analyzing sales transactions. Use Sales transaction values for actual sales revenue calculations.
+table Products
+	lineageTag: d932b28c-b05e-4284-8b2d-fc5d4b2dfff9
+	sourceLineageTag: [gold].[dim_product]
+
+	/// Surrogate key that uniquely identifies a product record in the Products dimension. It is a technical relationship key used to connect Products with Sales.
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6114c4b5-469b-4ec1-b2cf-af619ae8e6f5
+		sourceLineageTag: ProductKey
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the product from the source system. Use Product ID to identify the product at the business level.
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: edf437d8-6b32-4f7c-9545-752709417717
+		sourceLineageTag: ProductID
+		summarizeBy: count
+		sourceColumn: ProductID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business name of the product. Use this field for product-level reporting, filtering, grouping, and ranking.
+	column ProductName
+		dataType: string
+		lineageTag: 44bc678a-24a4-42e7-bd6b-732473c01bd3
+		sourceLineageTag: ProductName
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the supplier that provides the product. Use the related Suppliers dimension for supplier names and supplier attributes.
+	column SupplierID
+		dataType: int64
+		formatString: 0
+		lineageTag: 10c3e22d-cdc7-4394-b748-def628b992b7
+		sourceLineageTag: SupplierID
+		summarizeBy: count
+		sourceColumn: SupplierID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the product category assigned to the product. Use the related Categories dimension for category names and category-level analysis.
+	column CategoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: ff0b1a13-fd94-4e54-ae68-c2ebe5b5f837
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Description of how the product is packaged or sold per unit, such as the number of items, bottles, boxes, or other packaging details.
+	column QuantityPerUnit
+		dataType: string
+		lineageTag: aa3ca4b6-751c-4aab-bfa3-648bdb2e6fdc
+		sourceLineageTag: QuantityPerUnit
+		summarizeBy: none
+		sourceColumn: QuantityPerUnit
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Description of how the product is packaged or sold per unit, such as the number of items, bottles, boxes, or other packaging details.
+	column UnitPrice
+		dataType: double
+		lineageTag: 171a1383-3467-4adc-97be-f99a4392dc8f
+		sourceLineageTag: UnitPrice
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Current number of units of the product available in inventory according to the source product data.
+	column UnitsInStock
+		dataType: int64
+		formatString: 0
+		lineageTag: 5dc798aa-16c1-47bf-b368-850e0034bd39
+		sourceLineageTag: UnitsInStock
+		summarizeBy: sum
+		sourceColumn: UnitsInStock
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Current number of units of the product available in inventory according to the source product data.
+	column UnitsOnOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c4b5bb3-34a1-4337-9964-b4e43c6dcd80
+		sourceLineageTag: UnitsOnOrder
+		summarizeBy: sum
+		sourceColumn: UnitsOnOrder
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Inventory level at which the product should be considered for replenishment or reordering.
+	column ReorderLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e8c3a5f-8c83-48e1-9566-a60e9fb3e96b
+		sourceLineageTag: ReorderLevel
+		summarizeBy: sum
+		sourceColumn: ReorderLevel
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Boolean indicator showing whether the product has been discontinued. True means the product is discontinued; False means the product is still active according to the source data.
+	column Discontinued
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ee3617b3-73e9-4216-a2e0-4d977dfe2b57
+		sourceLineageTag: Discontinued
+		summarizeBy: none
+		sourceColumn: Discontinued
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when the product record was loaded into the data platform. This is technical ingestion metadata and should not be interpreted as a product creation or modification date.
+	column LoadDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 11ac8a4b-6f0b-40ba-aaf6-15a2738997ba
+		sourceLineageTag: LoadDate
+		summarizeBy: none
+		sourceColumn: LoadDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Technical indicator representing the source operation associated with the loaded product record, such as insert or update. It is primarily intended for data engineering and auditing.
+	column Operation
+		dataType: string
+		lineageTag: 3639e86d-aa25-43a9-8dd6-448ad6573376
+		sourceLineageTag: Operation
+		summarizeBy: none
+		sourceColumn: Operation
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source creation date of the product record when available. Missing values indicate that creation information was not provided by the source system.
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 21009309-7785-4b09-b180-6948b9d62525
+		sourceLineageTag: CreatedDate
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source modification date of the product record when available. It indicates when the source record was modified and is different from the SCD Effective From and Effective To timestamps.
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4f3e758e-55ce-40a3-9e38-c2e892915daf
+		sourceLineageTag: ModifiedDate
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when this version of the product dimension record became effective. It supports historical tracking of product attribute changes.
+	column EffectiveFrom
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 09769b6a-7c22-4629-8509-d6d62e50a53e
+		sourceLineageTag: EffectiveFrom
+		summarizeBy: none
+		sourceColumn: EffectiveFrom
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timestamp indicating when this version of the product dimension record became effective. It supports historical tracking of product attribute changes.
+	column EffectiveTo
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9f80de24-84c3-4fb8-ac21-d8b8e30ae2ff
+		sourceLineageTag: EffectiveTo
+		summarizeBy: none
+		sourceColumn: EffectiveTo
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Boolean indicator identifying whether this product dimension record represents the current version. True means the record is current; False indicates a historical version.
+	column IsCurrent
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 444cb0c0-90b9-4b52-a8ba-df8b37eaae90
+		sourceLineageTag: IsCurrent
+		summarizeBy: none
+		sourceColumn: IsCurrent
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CategoryName Display' =
+			
+			VAR MatchedCategory = RELATED(Categories[CategoryName])
+			RETURN
+			IF(ISBLANK(MatchedCategory), "Unknown", MatchedCategory)
+		lineageTag: 3dac60a2-9b4c-4515-86b0-5e394626fc68
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = entity
+		mode: directLake
+		source
+			entityName: dim_product
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

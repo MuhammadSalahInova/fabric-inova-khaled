@@ -1,0 +1,278 @@
+/// Sales contains sales transactions at the order-line level. Each row represents one product sold within a customer order. This is the primary fact table for analyzing sales performance, revenue, quantities, discounts, freight, and orders. Gross Sales represents the sales amount before discounts. Discount Amount represents the monetary discount applied to the order line. Net Sales represents revenue after deducting the discount amount from Gross Sales. Quantity represents the number of units sold, while Unit Price represents the selling price per unit before discount. Customer Key, Product Key, Supplier Key, Employee Key, Shipper Key, and Date Key are surrogate keys used only to connect sales transactions to their corresponding dimension records and should not be treated as business identifiers. Order ID identifies the customer order, while Product ID identifies the product from the source business system. Discount Rate is stored as a decimal where 0.15 represents a 15% discount. Use Net Sales for revenue and sales performance analysis unless the user explicitly asks for Gross Sales.
+table Sales
+	lineageTag: 627dcfa1-f097-42a9-9239-fe92e30c1084
+	sourceLineageTag: [gold].[fact_sales]
+
+	measure 'Total Sales' =
+			
+			SUMX(
+			    Sales,
+			    Sales[Quantity] * [UnitPrice]
+			)
+		lineageTag: 9fbe9dfd-3331-467c-af1d-7725431726c9
+
+		changedProperty = Name
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Technical surrogate key that uniquely identifies each row in the Sales fact table. It is used for internal data warehouse identification and relationships and should not be used as a business identifier or for business analysis.
+	column FactSalesKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 992c5903-32e5-4781-9c41-48f68021fece
+		sourceLineageTag: FactSalesKey
+		summarizeBy: count
+		sourceColumn: FactSalesKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the customer order from the source system. Multiple Sales rows can have the same Order ID because an order can contain multiple products. Use Order ID to identify and count distinct customer orders, not individual sales lines.
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a835364-e5a6-4853-9db3-52760e3f83d2
+		sourceLineageTag: OrderID
+		summarizeBy: count
+		sourceColumn: OrderID
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the product sold in the order line. It identifies the product from the source business system. Use Product ID or the related Products dimension to analyze sales by product.
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: caf0b6a4-cde4-491f-821f-032baa6c8b28
+		sourceLineageTag: ProductID
+		summarizeBy: count
+		sourceColumn: ProductID
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Surrogate key used to connect the sales transaction to the corresponding customer record in the Customers dimension. This is a technical relationship key and should not be interpreted as the customer's business identifier. Use Customer ID or customer attributes for business analysis.
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 39c67602-5024-418b-a958-665b66bc8911
+		sourceLineageTag: CustomerKey
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Surrogate key used to connect the sales transaction to the corresponding product record in the Products dimension. This is a technical relationship key and should not be used as the product's business identifier.
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 377fcdfc-23a3-4a10-8328-bd2fb2038161
+		sourceLineageTag: ProductKey
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Surrogate key used to connect the sales transaction to the corresponding supplier record through the Products dimension. This is a technical relationship key and should not be interpreted as the supplier's business identifier.
+	column SupplierKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b37362c6-3ee2-46c7-9969-5e7df40b32ad
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Surrogate key used to connect the sales transaction to the corresponding employee record in the Employees dimension. This is a technical relationship key and should not be used as the employee's business identifier.
+	column EmployeeKey
+		dataType: int64
+		formatString: 0
+		lineageTag: adf2d9d9-491c-4765-841c-94fbe9465c8b
+		sourceLineageTag: EmployeeKey
+		summarizeBy: none
+		sourceColumn: EmployeeKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Surrogate key used to connect the sales transaction to the corresponding shipping provider in the Shippers dimension. This is a technical relationship key and should not be interpreted as the shipper's business identifier.
+	column ShipperKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ddea4677-f7cc-43e4-b286-aee9ec603537
+		sourceLineageTag: ShipperKey
+		summarizeBy: none
+		sourceColumn: ShipperKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Technical date key used to connect each sales transaction to the corresponding date in the Date dimension. Use the Date dimension for date filtering, grouping, and time-based analysis instead of using Date Key directly.
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: d6c059da-ee89-4aa2-9ad1-3d4d62898861
+		sourceLineageTag: DateKey
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Selling price of one unit of the product before applying the order-line discount. This value represents the transaction-level unit price used to calculate Gross Sales.
+	column UnitPrice
+		dataType: double
+		lineageTag: 51b2e65c-c0d3-4cfb-9e3c-b409d1ed67c9
+		sourceLineageTag: UnitPrice
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Number of units of the product included in the order line. Use this field to analyze units sold and product volume. It represents quantity, not number of orders.
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: cd56d8cb-5930-4ade-9a6a-3b1e7d94580c
+		sourceLineageTag: Quantity
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Discount rate applied to the sales order line. The value is stored as a decimal between 0 and 1, where 0.15 represents a 15% discount. This field represents a rate and should not be summed as a total discount amount.
+	column Discount
+		dataType: double
+		lineageTag: 1c218779-3208-435a-9a89-abac62aede87
+		sourceLineageTag: Discount
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Shipping and freight cost associated with the customer order. Use this field to analyze shipping costs and freight by order, customer, date, product, or shipping provider.
+	column Freight
+		dataType: double
+		lineageTag: c3d66a43-f570-4a28-a2ab-9f673e1d81db
+		sourceLineageTag: Freight
+		summarizeBy: sum
+		sourceColumn: Freight
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Sales amount before applying the discount. Gross Sales is calculated from Unit Price multiplied by Quantity and represents the value of the products before discounts are deducted.
+	column GrossSales
+		dataType: double
+		lineageTag: e89d0aee-3bf4-4dac-b526-e808db3a8145
+		sourceLineageTag: GrossSales
+		summarizeBy: sum
+		sourceColumn: GrossSales
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Monetary value of the discount applied to the sales order line. This represents the actual amount deducted from Gross Sales because of the applied Discount Rate.
+	column DiscountAmount
+		dataType: double
+		lineageTag: dc8e573a-9927-4453-8d4f-6892a6931dbd
+		sourceLineageTag: DiscountAmount
+		summarizeBy: sum
+		sourceColumn: DiscountAmount
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Net sales revenue generated by the order line after deducting the Discount Amount from Gross Sales. Use Net Sales as the primary revenue measure for sales performance analysis unless the user explicitly asks for Gross Sales.
+	column NetSales
+		dataType: double
+		lineageTag: 9166a10f-6cc9-4b39-9c36-fd9b35fd882b
+		sourceLineageTag: NetSales
+		summarizeBy: sum
+		sourceColumn: NetSales
+
+		changedProperty = Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Sales = entity
+		mode: directLake
+		source
+			entityName: fact_sales
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+
+	changedProperty = IsHidden
+

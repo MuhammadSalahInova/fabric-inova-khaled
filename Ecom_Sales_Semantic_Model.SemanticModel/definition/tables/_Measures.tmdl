@@ -1,0 +1,845 @@
+table _Measures
+	lineageTag: a678e19e-031c-47a6-a090-6b362e6f4f6a
+
+	/// Total sales revenue after discounts. This is the primary sales metric for business analysis.
+	measure 'Total Net Sales' =
+			
+			SUM ( Sales[NetSales] )
+		displayFolder: Sales KPIs
+		lineageTag: 1653f1f8-6856-466c-8fbc-8ca17b26e315
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total sales revenue before discounts.
+	measure 'Gross Sales' =
+			
+			SUM ( Sales[GrossSales] )
+		displayFolder: Sales KPIs
+		lineageTag: d29fd3f0-0f4a-4fea-8e7d-12b0ab0cf34a
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total monetary value of discounts applied to sales.
+	measure 'Total Discount' =
+			
+			SUM ( Sales[DiscountAmount] )
+		displayFolder: Sales KPIs
+		lineageTag: e6661c6e-c864-4542-b8d2-5640159b16f9
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total freight cost associated with customer orders.
+	measure 'Total Freight' =
+			
+			SUM ( Sales[Freight] )
+		displayFolder: Sales KPIs
+		lineageTag: 4e23b89a-c37a-40cf-b4f7-e889f58a7629
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total number of units sold.
+	measure 'Total Quantity' =
+			
+			SUM ( Sales[Quantity] )
+		formatString: 0
+		displayFolder: Sales KPIs
+		lineageTag: c724d097-f91c-4f80-8062-9e88c17047ec
+
+		changedProperty = IsHidden
+
+	/// Total number of unique customer orders, based on distinct OrderID values in the Sales table.
+	measure 'Total Orders' =
+			
+			DISTINCTCOUNT ( Sales[OrderID] )
+		formatString: 0
+		displayFolder: Sales Analysis
+		lineageTag: 25a8666b-d8e9-4674-b01d-0110c0f430ae
+
+		changedProperty = IsHidden
+
+	/// Total number of unique customers associated with sales transactions.
+	measure 'Total Customers' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Customers[CustomerID]),
+			    Customers[IsCurrent] = TRUE()
+			)
+		formatString: 0
+		displayFolder: Sales KPIs
+		lineageTag: cf1ba5b1-ebf4-414e-8ef1-e983a18534ae
+
+		changedProperty = IsHidden
+
+	/// Total number of unique products sold.
+	measure 'Total Products' =
+			
+			DISTINCTCOUNT ( Sales[ProductKey] )
+		formatString: 0
+		displayFolder: Sales KPIs
+		lineageTag: a19b1c92-0707-4a44-b358-9baf86effc02
+
+		changedProperty = IsHidden
+
+	/// Average net sales value per customer order, calculated as Total Net Sales divided by Total Orders.
+	measure 'Average Order Value' =
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 8e4eeca9-1b38-40c1-8449-ce9ef6448503
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average selling price per unit across sales transactions.
+	measure 'Average Unit Price' =
+			
+			DIVIDE (
+			    [Gross Sales],
+			    [Total Quantity]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 5ed4df4e-1cf5-4f1d-a684-353fa825be18
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average number of units sold per customer order, calculated as Total Quantity divided by Total Orders.
+	measure 'Average Quantity per Order' =
+			
+			DIVIDE (
+			    [Total Quantity],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: d18663f9-438e-401a-98df-5542e0907038
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average net sales generated per customer.
+	measure 'Average Sales per Customer' =
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    [Total Customers]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 8f05e591-bae3-44fc-9550-b2f9f9638083
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average discount amount associated with each customer order.
+	measure 'Average Discount per Order' =
+			
+			DIVIDE (
+			    [Total Discount],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 61761ea8-3028-402c-9390-1404e0788101
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average  freight amount associated with each customer order.
+	measure 'Average Freight per Order' =
+			
+			DIVIDE (
+			    [Total Freight],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 6c5c4ed4-15c2-45ff-9168-34f8e821024f
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Percentage of gross sales represented by the total discount amount.
+	measure 'Discount %' =
+			
+			DIVIDE (
+			    [Total Discount],
+			    [Gross Sales]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Sales Analysis
+		lineageTag: 5105feca-5778-4a6c-8bd5-c09b1b929359
+
+		changedProperty = IsHidden
+
+	/// Total sales revenue after deducting discounts.
+	measure 'Sales After Discount' =
+			
+			[Gross Sales] - [Total Discount]
+		displayFolder: Sales Analysis
+		lineageTag: 05bddc55-54b8-4d65-82e3-eeb55cd9796b
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Number of unique customers with total net sales greater than zero in the current filter context.
+	measure 'Customers with Sales' =
+			
+			COUNTROWS (
+			    FILTER (
+			        VALUES ( Customers[CustomerID] ),
+			        [Total Net Sales] > 0
+			    )
+			)
+		formatString: 0
+		displayFolder: Sales Analysis
+		lineageTag: 422f6142-a16d-4004-a4ad-b497f818e4b9
+
+		changedProperty = IsHidden
+
+	/// Average net sales generated per customer with sales, calculated as Total Net Sales divided by Customers with Sales.
+	measure 'Sales per Customer' =
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    [Customers with Sales]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 30a901c2-cc05-488c-8306-c50613f159c3
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Number of unique products with total quantity greater than zero in the current filter context.
+	measure 'Products Sold' =
+			
+			COUNTROWS (
+			    FILTER (
+			        VALUES ( Products[ProductID] ),
+			        [Total Quantity] > 0
+			    )
+			)
+		formatString: 0
+		displayFolder: Sales Analysis
+		lineageTag: e24406a8-ebab-4f15-aebf-f0fcdb2d2581
+
+		changedProperty = IsHidden
+
+	/// Average net sales generated per product sold, calculated as Total Net Sales divided by Products Sold.
+	measure 'Sales per Product' =
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    [Products Sold]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 3d8cae3f-e57b-4d2e-af80-4efcd288d123
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total net sales from the beginning of the current year through the selected date.
+	measure 'Sales YTD' =
+			
+			TOTALYTD (
+			    [Total Net Sales],
+			    'Date'[FullDate]
+			)
+		displayFolder: Time Intelligence
+		lineageTag: 86aef308-c486-4625-9831-201fad9c03f2
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total net sales from the beginning of the current month through the selected date.
+	measure 'Sales MTD' =
+			
+			TOTALMTD (
+			    [Total Net Sales],
+			    'Date'[FullDate]
+			)
+		displayFolder: Time Intelligence
+		lineageTag: ae7f65a9-6c33-4b7b-8a19-a0e3aad5425c
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total net sales from the beginning of the current quarter through the selected date.
+	measure 'Sales QTD' =
+			
+			TOTALQTD (
+			    [Total Net Sales],
+			    'Date'[FullDate]
+			)
+		displayFolder: Time Intelligence
+		lineageTag: d16255de-5993-4a76-ab28-cc24c9bd79a7
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total net sales for the corresponding period in the previous year.
+	measure 'Sales Previous Year' =
+			
+			CALCULATE (
+			    [Total Net Sales],
+			    SAMEPERIODLASTYEAR ( 'Date'[FullDate] )
+			)
+		displayFolder: Time Intelligence
+		lineageTag: 64ce41d5-557a-4fae-be3e-806eaba1b3ec
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Difference in total net sales between the current period and the corresponding period in the previous year.
+	measure 'Sales YoY Difference' =
+			
+			[Total Net Sales] - [Sales Previous Year]
+		displayFolder: Time Intelligence
+		lineageTag: 8f6b9c74-699c-4921-9441-69de50634fd2
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Percentage growth in total net sales compared with the corresponding period in the previous year.
+	measure 'Sales YoY Growth %' =
+			
+			DIVIDE (
+			    [Sales YoY Difference],
+			    [Sales Previous Year]
+			)
+		displayFolder: Time Intelligence
+		lineageTag: 1252550f-01ba-4e46-8013-4fb3c154c8bb
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total quantity sold from the beginning of the current year through the selected date.
+	measure 'Quantity YTD' =
+			
+			TOTALYTD (
+			    [Total Quantity],
+			    'Date'[FullDate]
+			)
+		formatString: 0
+		displayFolder: Time Intelligence
+		lineageTag: 99b8940e-a741-4af7-a3d1-68bb94b460b9
+
+		changedProperty = IsHidden
+
+	/// Total number of unique customer orders from the beginning of the current year through the selected date.
+	measure 'Orders YTD' =
+			
+			TOTALYTD (
+			    [Total Orders],
+			    'Date'[FullDate]
+			)
+		formatString: 0
+		displayFolder: Time Intelligence
+		lineageTag: d2f095a6-7892-4ce2-80ca-4de098cd25d0
+
+		changedProperty = IsHidden
+
+	/// Average number of units sold per customer order, calculated as Total Quantity divided by Total Orders.
+	measure 'Average Order Quantity' =
+			
+			DIVIDE (
+			    [Total Quantity],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 064eb461-e852-4364-8698-9fa60f3c0e68
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average discount amount per customer order, calculated as Total Discount divided by Total Orders.
+	measure 'Average Order Discount' =
+			
+			DIVIDE (
+			    [Total Discount],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 5a3e5fba-8010-469f-8529-a80366bfe3ca
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Average freight cost per customer order, calculated as Total Freight divided by Total Orders.
+	measure 'Average Order Freight' =
+			
+			DIVIDE (
+			    [Total Freight],
+			    [Total Orders]
+			)
+		displayFolder: Sales Analysis
+		lineageTag: f4794a61-57e8-4e94-a9f7-35618c451863
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Percentage of total net sales represented by the current filter context.
+	measure 'Sales % of Total' =
+			
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    CALCULATE (
+			        [Total Net Sales],
+			        ALL ( Sales )
+			    )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Sales Analysis
+		lineageTag: 252eff72-3b40-407c-9ac7-8dfa84258696
+
+		changedProperty = IsHidden
+
+	/// Average net sales generated per employee, calculated as Total Net Sales divided by the number of distinct employees in the current filter context.
+	measure 'Sales per Employee' =
+			
+			DIVIDE (
+			    [Total Net Sales],
+			    DISTINCTCOUNT ( Employees[EmployeeID] )
+			)
+		displayFolder: Sales Analysis
+		lineageTag: 1c6bb423-235f-4a5a-8b77-da2adc469611
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total number of customer orders in the current filter context, including when analyzed by shipper.
+	measure 'Orders per Shipper' =
+			
+			[Total Orders]
+		formatString: 0
+		displayFolder: Sales Analysis
+		lineageTag: 1348d9ae-a240-4911-b76e-467dfa3cf43e
+
+		changedProperty = IsHidden
+
+	/// Total net sales generated by a customer during the period from 1996 through 1998, used to measure customer monetary value.
+	measure 'Customer Monetary' =
+			
+			CALCULATE(
+			    SUM(Sales[NetSales]),
+			    'Date'[Year] >= 1996 && 'Date'[Year] <= 1998
+			)
+		displayFolder: RFM
+		lineageTag: f3bac78d-74d3-47c1-9603-e4928ae8add5
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Number of distinct customer orders during the period from 1996 through 1998, used to measure customer purchase frequency.
+	measure 'Customer Frequency' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Sales[OrderID]),
+			    'Date'[Year] >= 1996 && 'Date'[Year] <= 1998
+			)
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: 6c53b15f-6439-427d-9748-3ff4603ea106
+
+		changedProperty = IsHidden
+
+	/// Number of days since the customer's last purchase, measured against the latest available date in the 1996–1998 analysis period.
+	measure 'Customer Recency' =
+			
+			VAR LastPurchaseDate =
+			    CALCULATE(
+			        MAX('Date'[FullDate]),
+			        FILTER(Sales, Sales[CustomerKey] = SELECTEDVALUE(Customers[CustomerKey])),
+			        'Date'[Year] >= 1996 && 'Date'[Year] <= 1998
+			    )
+			VAR ReferenceDate =
+			    CALCULATE(
+			        MAX('Date'[FullDate]),
+			        ALL('Date'),
+			        'Date'[Year] >= 1996 && 'Date'[Year] <= 1998
+			    )
+			RETURN
+			    DATEDIFF(LastPurchaseDate, ReferenceDate, DAY)
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: dbab4185-81dd-49e2-92fc-c9664bf722ad
+
+		changedProperty = IsHidden
+
+	measure 'YoY Growth Display' =
+			
+			VAR Growth = [Sales YoY Growth %]
+			RETURN
+			IF(
+			    ISBLANK(Growth),
+			    BLANK(),
+			    IF(Growth >= 0, "▲ ", "▼ ") & FORMAT(Growth, "0.0%")
+			)
+		lineageTag: ec169562-34d3-44d5-9760-633bfc7a2a94
+
+	measure 'YoY Growth Color' =
+			
+			VAR Growth = [Sales YoY Growth %]
+			RETURN
+			IF(
+			    ISBLANK(Growth),
+			    "#808080",
+			    IF(Growth >= 0, "#2E7D32", "#C62828")
+			)
+		lineageTag: 20c8c6d4-cd75-41b4-9ea7-5ae6a1ca1c66
+
+	measure 'Dynamic Title_1' =
+			
+			"Executive Overview" &
+			IF(
+			    ISFILTERED('Date'[Year]),
+			    " - " & SELECTEDVALUE('Date'[Year], "Multiple Years"),
+			    " - All Years"
+			) &
+			IF(
+			    ISFILTERED(Categories[CategoryName]),
+			    " | " & SELECTEDVALUE(Categories[CategoryName], "Multiple Categories"),
+			    ""
+			)
+		lineageTag: f9a71ebd-8c8d-47a2-8123-01f9835d66db
+
+	measure 'Insight Top Country' =
+			
+			"🌍 Top country: " &
+			CALCULATE(
+			    SELECTEDVALUE(Customers[Country]),
+			    TOPN(1, VALUES(Customers[Country]), [Total Net Sales], DESC)
+			) & " (" &
+			FORMAT(
+			    MAXX(TOPN(1, VALUES(Customers[Country]), [Total Net Sales], DESC), [Total Net Sales]),
+			    "#,##0"
+			) & ")"
+		lineageTag: 73b85da9-f4af-4ec8-9dfa-eeb4d4910683
+
+	measure 'Insight Top Category' =
+			
+			"📦 Top category: " &
+			CALCULATE(
+			    SELECTEDVALUE(Categories[CategoryName]),
+			    TOPN(1, VALUES(Categories[CategoryName]), [Total Net Sales], DESC)
+			)
+		lineageTag: ca6bfb2a-239e-4626-86cc-c5a3a9c7b566
+
+	measure 'Insight Top Product' =
+			
+			"🏆 Best seller: " &
+			CALCULATE(
+			    SELECTEDVALUE(Products[ProductName]),
+			    TOPN(1, VALUES(Products[ProductName]), [Total Net Sales], DESC)
+			)
+		lineageTag: 101ada8a-4861-4381-9882-94c815d09092
+
+	measure 'Insight YoY Summary' =
+			
+			VAR Growth = [Sales YoY Growth %]
+			RETURN
+			IF(
+			    ISBLANK(Growth),
+			    "📊 No prior year data to compare.",
+			    IF(
+			        Growth >= 0,
+			        "📈 Sales grew " & FORMAT(Growth, "0.0%") & " vs last year",
+			        "📉 Sales dropped " & FORMAT(ABS(Growth), "0.0%") & " vs last year"
+			    )
+			)
+		lineageTag: f0800af4-27cb-41dc-a801-12fd6be0e25c
+
+	measure 'Key Insights Combined' =
+			
+			[Insight Top Country] & UNICHAR(10) &
+			[Insight Top Category] & UNICHAR(10) &
+			[Insight Top Product] & UNICHAR(10) &
+			[Insight YoY Summary]
+		lineageTag: c33a772c-26c5-4886-a5a5-f6e1ebadb453
+
+	measure 'Dynamic Title_2' =
+			
+			"Sales Performance" &
+			IF(
+			    ISFILTERED('Date'[Year]),
+			    " - " & SELECTEDVALUE('Date'[Year], "Multiple Years"),
+			    " - All Years"
+			) &
+			IF(
+			    ISFILTERED(Categories[CategoryName]),
+			    " | " & SELECTEDVALUE(Categories[CategoryName], "Multiple Categories"),
+			    ""
+			)
+		lineageTag: 4d5f46d0-1e40-461e-a82e-16e524e023d6
+
+	/// Highest total net sales generated by a single customer in the current filter context.
+	measure 'Top Customer Sales' =
+			
+			MAXX(
+			    VALUES(Customers[CustomerID]),
+			    CALCULATE([Total Net Sales])
+			)
+		displayFolder: Sales Analysis
+		lineageTag: a9be2d51-d9cc-4d26-a251-00c4b27f9341
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Dynamic Title_3' =
+			
+			"Customer Insights" &
+			IF(
+			    ISFILTERED('Date'[Year]),
+			    " - " & SELECTEDVALUE('Date'[Year], "Multiple Years"),
+			    " - All Years"
+			) &
+			IF(
+			    ISFILTERED(Customers[ContactName]),
+			    " | " & SELECTEDVALUE(Customers[ContactName], "All Customers"),
+			    ""
+			)
+		lineageTag: 89b94d58-7a86-4493-931d-c306978a9004
+
+	measure 'Dynamic Title_4' =
+			
+			"Customer Details" &
+			IF(
+			    ISFILTERED('Customers'[CompanyName]),
+			    " - " & SELECTEDVALUE('Date'[Year])
+			) &
+			IF(
+			    ISFILTERED(Customers[ContactName]),
+			    " | " & SELECTEDVALUE(Customers[ContactName], "All Customers"),
+			    ""
+			)
+		lineageTag: cf624ed0-6626-4936-b109-70dcb6497b0c
+
+	/// Total number of product categories available in the Categories table.
+	measure 'Total Categoies' = DISTINCTCOUNT(Categories[CategoryID])
+		formatString: 0
+		displayFolder: Sales KPIs
+		lineageTag: f7e1a41c-ba29-4bd2-a3cb-7f775b1acc46
+
+	/// Name of the product category with the highest total net sales.
+	measure 'Top Category by Sales' = ```
+			
+			CALCULATE(
+			    SELECTEDVALUE(Categories[CategoryName]),
+			    TOPN(
+			        1, 
+			        ALL(Categories[CategoryName]), 
+			        [Total Net Sales], 
+			        DESC
+			    )
+			)
+			```
+		displayFolder: Sales Analysis
+		lineageTag: 059b8d49-851a-4dab-924d-453360b232e5
+
+	measure 'Dynamic Title_5' =
+			
+			"Product_Category Performance" &
+			IF(
+			    ISFILTERED('Categories'[CategoryName]),
+			    " - " & SELECTEDVALUE(Categories[CategoryName])
+			) &
+			IF(
+			    ISFILTERED(Products[ProductName]),
+			    " | " & SELECTEDVALUE(Products[ProductName]),
+			    ""
+			)
+		lineageTag: 373a7b5e-7cef-40e0-bb7a-4c566a621f1e
+
+	measure 'Dynamic Title_6' =
+			
+			"Product_Category Performance" &
+			IF(
+			    ISFILTERED('Categories'[CategoryName]),
+			    " - " & SELECTEDVALUE(Categories[CategoryName])
+			) &
+			IF(
+			    ISFILTERED(Products[ProductName]),
+			    " | " & SELECTEDVALUE(Products[ProductName]),
+			    ""
+			)
+		lineageTag: b8abfe42-48f5-4ae7-b0be-d4f4b6e5173b
+
+	/// Customer recency score from 1 to 5 based on the number of days since the customer's last purchase, where lower recency values indicate more recent purchases and higher scores indicate more recent customer activity.
+	measure R_Score =
+			
+			VAR Rec = [Customer Recency]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    Rec <= 245, 5,
+			    Rec <= 260, 4,
+			    Rec <= 280, 3,
+			    Rec <= 320, 2,
+			    1
+			)
+		displayFolder: RFM
+		lineageTag: 50eff7b3-2b64-4599-b573-3ab876f89a2e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Customer frequency score from 1 to 5 based on the number of customer orders during the 1996–1998 analysis period, where higher scores indicate more frequent purchases.
+	measure F_Score =
+			
+			VAR Freq = [Customer Frequency]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    Freq >= 15, 5,
+			    Freq >= 10, 4,
+			    Freq >= 7, 3,
+			    Freq >= 4, 2,
+			    1
+			)
+		displayFolder: RFM
+		lineageTag: 78f219c2-3964-47c1-b0b6-c0a2833d6b3a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Customer monetary score from 1 to 5 based on total net sales during the 1996–1998 analysis period, where higher scores indicate higher customer monetary value.
+	measure M_Score =
+			
+			VAR Mon = [Customer Monetary]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    Mon >= 20000, 5,
+			    Mon >= 10000, 4,
+			    Mon >= 5000, 3,
+			    Mon >= 2000, 2,
+			    1
+			)
+		displayFolder: RFM
+		lineageTag: e3084d9f-2549-4449-be5d-ca9fba58d3ac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Combined RFM score calculated from the customer's Recency, Frequency, and Monetary scores, with Recency weighted by 100, Frequency by 10, and Monetary by 1.
+	measure 'RFM Score' =
+			
+			[R_Score] * 100 + [F_Score] * 10 + [M_Score]
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: 81a78301-9ddd-45e6-9eda-eb645b9bdbc7
+
+	/// Customer classification based on Recency, Frequency, and Monetary scores (R, F, and M), assigning customers to segments such as Champions, Loyal Customers, New Customers, At Risk, Lost, or Potential Loyalist.
+	measure 'Customer Segment' =
+			
+			VAR R = [R_Score]
+			VAR F = [F_Score]
+			VAR M = [M_Score]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    R >= 4 && F >= 4 && M >= 4, "Champions",
+			    R >= 3 && F >= 3, "Loyal Customers",
+			    R >= 4 && F <= 2, "New Customers",
+			    R <= 2 && F >= 3 && M >= 3, "At Risk",
+			    R <= 2 && F <= 2 && M <= 2, "Lost",
+			    "Potential Loyalist"
+			)
+		displayFolder: RFM
+		lineageTag: d6b4987d-cf30-42ab-9927-afa04a7197b3
+
+	/// Total number of unique customers included in the customer segmentation analysis, based on distinct CustomerKey values in the Sales table.
+	measure 'Total Segmented Customers' =
+			
+			DISTINCTCOUNT(Sales[CustomerKey])
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: 13139e6b-463f-431c-8105-e2469f8e29ac
+
+	/// Number of customers classified as Champions based on the Customer Segment measure.
+	measure 'Champions Count' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Customers[CustomerKey]),
+			    FILTER(Customers, [Customer Segment] = "Champions")
+			)
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: 7347b495-d750-4018-9950-64d1b0efdae6
+
+	/// Average recency value across all customers, based on Customer Recency.
+	measure 'Avg Recency All Customers' =
+			
+			AVERAGEX(ALL(Sales[CustomerKey]), [Customer Recency])
+		formatString: 0
+		displayFolder: RFM
+		lineageTag: 55ff5362-c0d7-4332-bef8-2925f9f20115
+
+	/// Average monetary value generated per customer across all customers, based on Customer Monetary.
+	measure 'Avg Monetary All Customers' =
+			
+			AVERAGEX(ALL(Sales[CustomerKey]), [Customer Monetary])
+		displayFolder: RFM
+		lineageTag: d523bd4a-a574-46e6-bd7f-09612d36e19a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Dynamic Title_7' = ```
+			
+			"R_F_M Segmentation" &
+			IF(
+			    ISFILTERED(Customers[ContactName]),
+			    " - " & SELECTEDVALUE(Customers[ContactName])
+			) 
+			```
+		lineageTag: cef5adbc-24b5-4f52-b51a-072533783b4b
+
+	column Deleteme
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 78bb08b6-fd70-432f-877b-554375222eef
+		summarizeBy: sum
+		sourceColumn: Deleteme
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				  Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Deleteme = _t]),
+				  #"Changed column type" = Table.TransformColumnTypes(Source, {{"Deleteme", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

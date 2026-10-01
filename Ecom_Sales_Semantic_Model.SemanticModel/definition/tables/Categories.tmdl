@@ -1,0 +1,79 @@
+/// Categories contains product category information used to group and analyze products and sales by category. Each row represents one product category. Category Key is the surrogate key used to connect categories to product records and should be treated as a technical relationship key. Category ID is the business identifier of the category from the source system. Category Name represents the business-friendly name of the product category. Category Description provides additional information about the category where available. Categories are related to Products, and sales analysis by category should normally be performed through the Products dimension and the Sales fact table.
+table Categories
+	lineageTag: 6b711aec-5c91-4a5c-91d8-04f2191293fe
+	sourceLineageTag: [gold].[dim_category]
+
+	/// Surrogate key used to connect product records to the Categories dimension. This is a technical relationship key.
+	column CategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 1000bb81-8420-4559-8240-d4bed7cc2ac4
+		sourceLineageTag: CategoryKey
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the product category from the source system.
+	column CategoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 95ddcd73-38b6-4654-96e0-0f38cf0cfe32
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business name of the product category. Use this field to group products and analyze sales performance by category.
+	column CategoryName
+		dataType: string
+		lineageTag: dc513a08-f980-46d0-82f3-77bc8a2aeac8
+		sourceLineageTag: CategoryName
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business description of the products included in the category. It provides additional context about the category's products and characteristics.
+	column Description
+		dataType: string
+		lineageTag: a8c888d1-84c8-4b7b-9189-bae0b36b34bd
+		sourceLineageTag: Description
+		summarizeBy: none
+		sourceColumn: Description
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CategoryName Display' =
+			
+			VAR MatchedCategory = RELATED(Categories[CategoryName])
+			RETURN
+			IF(ISBLANK(MatchedCategory), "Unknown", MatchedCategory)
+		lineageTag: 8ea0ccc0-200b-4a56-b289-d8b535eaf152
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Categories = entity
+		mode: directLake
+		source
+			entityName: dim_category
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

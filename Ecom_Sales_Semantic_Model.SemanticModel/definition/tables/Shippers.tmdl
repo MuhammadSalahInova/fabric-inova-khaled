@@ -1,0 +1,66 @@
+/// Shippers contains shipping provider information used to analyze orders, sales, and freight by shipping company. Each row represents one shipping provider. Shipper Key is the surrogate key used to connect shipping providers to sales transactions and is a technical relationship key. Shipper ID is the business identifier of the shipping provider from the source system. Company Name represents the name of the shipping company. Shipper information can be used to compare sales activity, order volume, and freight costs across shipping providers. Freight represents the shipping or freight cost associated with the order and should be analyzed from the Sales fact table.
+table Shippers
+	lineageTag: 45f51be4-18dc-475e-a145-e9f02304ab72
+	sourceLineageTag: [gold].[dim_shipper]
+
+	/// Surrogate key used to connect shipping providers to Sales transactions. This is a technical relationship key.
+	column ShipperKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b522786-8d88-419d-b2a4-fb8372a972fc
+		sourceLineageTag: ShipperKey
+		summarizeBy: none
+		sourceColumn: ShipperKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the shipping provider from the source system.
+	column ShipperID
+		dataType: int64
+		formatString: 0
+		lineageTag: f574569b-9330-4c8e-865e-9941d0248c94
+		sourceLineageTag: ShipperID
+		summarizeBy: none
+		sourceColumn: ShipperID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Name of the shipping company or provider. Use this field to analyze orders, freight, and shipping activity by provider.
+	column CompanyName
+		dataType: string
+		lineageTag: 6a94e97b-15dc-4d54-9030-b959b6140886
+		sourceLineageTag: CompanyName
+		summarizeBy: none
+		sourceColumn: CompanyName
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Primary telephone number associated with the shipping provider.
+	column Phone
+		dataType: string
+		lineageTag: b13637e7-3645-409b-a675-e8654837ade8
+		sourceLineageTag: Phone
+		summarizeBy: none
+		sourceColumn: Phone
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Shippers = entity
+		mode: directLake
+		source
+			entityName: dim_shipper
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+

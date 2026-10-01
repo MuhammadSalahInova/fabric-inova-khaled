@@ -1,0 +1,66 @@
+/// Territories contains geographic sales territory information used to describe and analyze business activity by territory. Each row represents one sales territory and contains territory identifiers, descriptions, and associated regional information where available. Territory attributes are intended for geographic or organizational analysis. Territory is currently maintained as a standalone dimension in the semantic model because there is no valid Territory Key relationship to the Employees table or Sales fact table in the current data model. Do not assume that a sales transaction, employee, or customer belongs to a specific territory unless an explicit valid relationship or supporting data is available.
+table Territories
+	lineageTag: 5610d47c-a4cc-44f1-a3af-232e11d18f6b
+	sourceLineageTag: [gold].[dim_territory]
+
+	/// Surrogate key that uniquely identifies a territory record in the Territories dimension. It is a technical key and should only be used for relationships if a valid business relationship exists.
+	column TerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d024bb2-8847-44e7-87f3-af813d5bb124
+		sourceLineageTag: TerritoryKey
+		summarizeBy: count
+		sourceColumn: TerritoryKey
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the sales territory from the source system.
+	column TerritoryID
+		dataType: string
+		lineageTag: 1f881f38-29f9-4f86-a76f-15c911544784
+		sourceLineageTag: TerritoryID
+		summarizeBy: none
+		sourceColumn: TerritoryID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business name or description of the sales territory. Use this field to identify and describe territories in geographic or organizational analysis.
+	column TerritoryDescription
+		dataType: string
+		lineageTag: b4bdc235-4c8e-45f7-8bba-f970cb68ca00
+		sourceLineageTag: TerritoryDescription
+		summarizeBy: none
+		sourceColumn: TerritoryDescription
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business identifier of the broader region associated with the territory. It can be used to group territories into regional areas when a corresponding region definition is available.
+	column RegionID
+		dataType: int64
+		formatString: 0
+		lineageTag: 611e8540-fcea-4406-bb5e-f34e1d5bc435
+		sourceLineageTag: RegionID
+		summarizeBy: count
+		sourceColumn: RegionID
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Territories = entity
+		mode: directLake
+		source
+			entityName: dim_territory
+			schemaName: gold
+			expressionSource: 'DirectLake - Ecom_Lakehouse'
+
+	changedProperty = Name
+
+	changedProperty = Description
+
